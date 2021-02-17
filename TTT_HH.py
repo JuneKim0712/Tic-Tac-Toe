@@ -43,8 +43,11 @@ def is3(c):
             return 1
         elif (405, 205) in c and (405, 405) in c:
             return 1
-        elif (5, 405) in c and ():
-            return
+    elif (5, 405) in c:
+        if (5, 5) in c and (5, 205) in c:
+            return 1
+        elif (205, 405) in c and (405, 405) in c:
+            return 1
     return 0
 
 def ttt():

@@ -1,3 +1,4 @@
+import numpy as np
 import pygame
 
 
@@ -6,7 +7,7 @@ def placement(coordinate):
     y=coordinate[1]
     if x <= 200:
         if y <= 200:
-            return (5, 0)
+            return (5, 5)
         elif y <= 400:
             return (5, 205)
         else:
@@ -26,6 +27,25 @@ def placement(coordinate):
         else:
             return (405, 405)
 
+
+def is3(c):
+    if (205, 205) in c:
+        if (5, 5) in c and (405, 405) in c:
+            return 1
+        elif (405, 5) in c and (5, 405) in c:
+            return 1
+        elif (205, 5) in c and (205, 405) in c:
+            return 1
+        elif (5, 205) in c and (405, 205) in c:
+            return 1
+    elif (405, 5) in c:
+        if (5, 5) in c and (205, 5) in c:
+            return 1
+        elif (405, 205) in c and (405, 405) in c:
+            return 1
+        elif (5, 405) in c and ():
+            return
+    return 0
 
 def ttt():
     pygame.init()
@@ -48,11 +68,25 @@ def ttt():
                 return
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if player == 0:
-                    _0.append(placement(pygame.mouse.get_pos()))
-                    player=1
+                    po=placement(pygame.mouse.get_pos())
+                    if not po in _0 and not po in _1:
+                        player=1
+                        _0.append(po)
+                    if is3(_0):
+                        print('circle won')
+                        open=False
+                    
                 else:
-                    _1.append(placement(pygame.mouse.get_pos()))
-                    player=0
+                    po=placement(pygame.mouse.get_pos())
+                    if not po in _0 and not po in _1:
+                        player=0
+                        _1.append(po)
+                    if is3(_1):
+                        print('cross won')
+                        open=False
+        if len(_0)==5:
+            print('draw')
+            open=False
         for i in _0: DISPLAY.blit(o, i)
         for i in _1: DISPLAY.blit(x, i)
         pygame.display.update()
@@ -60,5 +94,5 @@ def ttt():
     return
 
 if __name__ == '__main__':
-    for i in range(100):
+    for i in range(1, 100):
         ttt()

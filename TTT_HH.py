@@ -56,33 +56,41 @@ def is3(c):
 #nextmove for AI
 def nextmove(_1, _0):
     stm=cas(_1+_0)
-    amove=[(5, 5), -1, 0]
+    li=[]
     for i in stm:
-        inax=minimax((_1+[i]).copy(), _0.copy(), '_1', 0)
-        if inax[0] >= amove[1] and inax[1] <= amove[2]:
-            amove=[i, inax[0], inax[1]]
-    return amove[0]
+        inax=minimax(_1.copy(), (_0+[i]).copy())
+        if inax==1:
+            return  i
+        li.append((inax, i))
+    li.sort()
+    print(li)
+    return li[-1][-1]
 
 
 #1=win, -1=lost, draw=0, returns coordinate, (win, lose or draw)
-def minimax(_1, _0, turn, tree):
-    if turn=='_0': turn='_1'
-    else: turn='_0'
-    tree += 1
-    if is3(_1): return (1, tree, turn)
-    elif is3(_0): return (-1, tree, turn)
-    elif tree == 9: return (0, tree, turn)
+def minimax(_1, _0):
+    if is3(_0): return 1
+    elif is3(_1): return -1
+    elif len(_1+_0)==9: return 0
     stm=cas(_1+_0)
     list_wld=[]
     for i in stm:
-        result=minimax((_1+[i]).copy(), _0, turn, tree.copy())
-        if result == 1 and turn=='_1':
-            return (result, tree, turn)
+        result=minimax2((_1+[i]).copy(), _0.copy())
         list_wld.append(result)
     list_wld.sort()
-    if turn=='_1': wld=list_wld[-1]
-    else: wld=list_wld[0]
-    return (wld, tree, turn)
+    return list_wld[0]
+
+def minimax2(_1, _0):
+    if is3(_0): return 1
+    elif is3(_1): return -1
+    elif len(_1+_0)==9: return 0
+    stm=cas(_1+_0)
+    list_wld=[]
+    for i in stm:
+        result=minimax(_1.copy(), (_0+[i]).copy())
+        list_wld.append(result)
+    list_wld.sort()
+    return list_wld[-1]
 
 
 #function that shows avaible space for next move
@@ -106,29 +114,29 @@ def ttt():
     for line in lines: pygame.draw.line(DISPLAY, BLACK, line[0], line[1])
     pygame.display.flip()
     open = True
-    player=0
-    _0=[]
+    player=1
+    _0=[(205, 205)]
     _1=[]
     while open:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if player == 0:
+                if player==1:
                     po=placement(pygame.mouse.get_pos())
                     if not po in _0 and not po in _1:
-                        player=1
-                        _0.append(po)
-                    if is3(_0):
-                        print('circle won')
-                        open=False
-                else:
-                    po=nextmove(_1.copy(), _0.copy())
-                    player=0
-                    _1.append(po)
-                    if is3(_1):
-                        print('cross won')
-                        open=False
+                        player=0
+                        _1.append(po)
+        if player == 0:
+            po=nextmove(_1.copy(), _0.copy())
+            player=1
+            _0.append(po)
+        if is3(_0):
+            print('cross won')
+            open=False           
+        if is3(_1):
+            print('circle won')
+            open=False
         if len(_0)==5:
             print('draw')
             open=False

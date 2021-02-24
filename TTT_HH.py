@@ -40,12 +40,12 @@ def is3(c):
             return 1
         elif (5, 205) in c and (405, 205) in c:
             return 1
-    elif (405, 5) in c:
+    if (405, 5) in c:
         if (5, 5) in c and (205, 5) in c:
             return 1
         elif (405, 205) in c and (405, 405) in c:
             return 1
-    elif (5, 405) in c:
+    if (5, 405) in c:
         if (5, 5) in c and (5, 205) in c:
             return 1
         elif (205, 405) in c and (405, 405) in c:
@@ -59,11 +59,8 @@ def nextmove(_1, _0):
     li=[]
     for i in stm:
         inax=minimax(_1.copy(), (_0+[i]).copy())
-        if inax==1:
-            return  i
         li.append((inax, i))
     li.sort()
-    print(li)
     return li[-1][-1]
 
 

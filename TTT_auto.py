@@ -78,45 +78,47 @@ def check(list_=[]):
 
 #_1 player, _0 AI
 def game():
-    try:
+    _0=[]
+    _1=[]
+    t=time.time()
+    if not check():
+        pyautogui.moveTo(160, 290)
+        cp=Image.open('image/cp.png')
+        im=ImageGrab.grab((200, 400, 250, 450))
+        diff = ImageChops.difference(im, cp)
+        if diff.getbbox():
+            _0=[(390, 520)]
+            pyautogui.click(390, 520)
+    while True:
+        if time.time()-t>16: return
+        cc=check(_0+_1)
+        if cc:
+            if is3(_0) or is3(_1): return
+            _1=check(_0)
+            stm=cas(_1+_0)
+            li=[]
+            for i in stm:
+                inax=minimax(_1.copy(), (_0+[i]).copy())
+                li.append((inax, i))
+            li.sort()
+            if not li: return
+            _0.append(li[-1][-1])
+            pyautogui.click(li[-1][-1])
+            if is3(_0) or is3(_1): return
+        time.sleep(0.1)
+    return
 
-        time.sleep(3)
-        _0=[]
-        _1=[]
-        if not check():
-            pyautogui.moveTo(160, 290)
-            cp=Image.open('image/cp.png')
-            im=ImageGrab.grab((200, 400, 250, 450))
-            diff = ImageChops.difference(im, cp)
-            if diff.getbbox():
-                _0=[(390, 520)]
-                pyautogui.click(390, 520)
-        while True:
-            cc=check(_0+_1)
-            if cc:
-                if is3(_0) or is3(_1): break
-                _1=check(_0)
-                stm=cas(_1+_0)
-                li=[]
-                for i in stm:
-                    inax=minimax(_1.copy(), (_0+[i]).copy())
-                    li.append((inax, i))
-                li.sort()
-                _0.append(li[-1][-1])
-                pyautogui.click(li[-1][-1])
-                if is3(_0) or is3(_1): break
-            time.sleep(0.5)
-        time.sleep(12)
-        pl=pyautogui.locateOnScreen('image/play again.png')
-        pyautogui.click(pl[0], pl[1])
-        pyautogui.moveTo(20, 20)
-        return
-    except:
-        time.sleep(12)
-        pl=pyautogui.locateOnScreen('image/play again.png')
-        pyautogui.click(pl[0], pl[1])
-        pyautogui.moveTo(20, 20)
-        return
-
-for i in range(1, 100):
+for i in range(1, 99999):
+    time.sleep(3)
     game()
+    pyautogui.moveTo(20, 20)
+    print(i)
+    time.sleep(2)
+    while True:
+        time.sleep(0.1)
+        pl=pyautogui.locateOnScreen('image/play again.png')
+        print(pl)
+        if type(pl) != type(None):
+            pyautogui.click(pl[0]+5, pl[1]+5)
+            pyautogui.moveTo(20, 20)
+            break
